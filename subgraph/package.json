@@ -1,6 +1,6 @@
 {
-  "name": "jolly-roger-subgraph",
-  "description": "Subgraph (thegraph.com) for Jolly Roger",
+  "name": "basic-alliance-subgraph",
+  "description": "Subgraph (thegraph.com) for Basic Alliance",
   "private": true,
   "version": "0.0.1",
   "devDependencies": {

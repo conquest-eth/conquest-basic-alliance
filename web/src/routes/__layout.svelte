@@ -10,7 +10,7 @@
 
   import {appDescription, url as appUrl} from '../application.json';
 
-  const title = 'Jolly Roger, Template for Decentralised Applications.';
+  const title = 'Basic Alliance, Template for Decentralised Applications.';
   const description = appDescription;
   const host = appUrl.endsWith('/') ? appUrl : appUrl + '/';
   const previewImage = host + 'preview.png';
