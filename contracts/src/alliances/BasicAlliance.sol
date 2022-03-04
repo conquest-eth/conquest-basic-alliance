@@ -4,21 +4,34 @@ pragma solidity 0.8.9;
 import "../external/alliances/AllianceRegistry.sol";
 // import "../interfaces/IAlliance.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract BasicAlliance {
     bool internal _original;
     AllianceRegistry internal immutable _allianceRegistry;
     address public admin;
 
+    string internal _baseURI;
+
     // constructor(AllianceRegistry allianceRegistry, AllianceRegistry.PlayerSubmission[] memory playerSubmissions) {
     //     _allianceRegistry = allianceRegistry;
     //     _allianceRegistry.addMultiplePlayersToAlliance(playerSubmissions);
     // }
 
-    constructor(AllianceRegistry allianceRegistry) {
+    constructor(AllianceRegistry allianceRegistry, string memory baseURI) {
         _allianceRegistry = allianceRegistry;
         _original = true;
         admin = address(1); // lock it
+        init(baseURI);
+    }
+
+    function init(string memory baseURI) public {
+        require(bytes(_baseURI).length == 0, "ALREADY_INITIALISED");
+        _baseURI = baseURI;
+    }
+
+    function frontendURI() external view returns (string memory) {
+        return string(bytes.concat(bytes(_baseURI), bytes(Strings.toHexString(uint256(uint160(address(this))), 20))));
     }
 
     function setAdminAndAddMembers(address newAdmin, AllianceRegistry.PlayerSubmission[] calldata playerSubmissions)
@@ -44,6 +57,7 @@ contract BasicAlliance {
     ) external {
         require(_original, "CANNOT_INSTANTIATE_FROM_CLONES");
         address newAlliance = Clones.cloneDeterministic(address(this), keccak256(abi.encodePacked(salt, msg.sender)));
+        BasicAlliance(newAlliance).init(_baseURI);
         BasicAlliance(newAlliance).setAdminAndAddMembers(initialAdmin, playerSubmissions);
     }
 
