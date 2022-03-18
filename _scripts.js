@@ -317,7 +317,7 @@ async function performAction(rawArgs) {
     const {extra} = parseArgs(args, 0, {});
 
     execute(`newsh "npm run common:dev"`);
-    execute(`newsh "npm run web:dev localhost -- --skipContracts --waitContracts --port 3001"`); // ${extra.join(' ')}"`);
+    execute(`newsh "npm run web:dev localhost -- --skipContracts --waitContracts --port 3002"`); // ${extra.join(' ')}"`);
     execute(`newsh "npm run contracts:local:dev"`);
     execute(`newsh "wait-on web/src/lib/contracts.json && npm run subgraph:dev"`);
 
