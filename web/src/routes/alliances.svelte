@@ -15,6 +15,7 @@
   import Header from '$lib/navigation/header.svelte';
   import {playersQuery} from '$lib/blockchain/playersQuery';
   import {url} from '$lib/utils/url';
+  import {BigNumber} from '@ethersproject/bignumber';
 
   function connect() {
     flow.connect();
@@ -77,6 +78,43 @@
           signature: signature,
         },
       ]);
+    });
+  }
+
+  let addressToInvite: string | undefined;
+  let inviteURL: string | undefined;
+  async function createInvite() {
+    await flow.execute(async (contracts) => {
+      const allianceData = await contracts.AllianceRegistry.callStatic.getAllianceData(addressToInvite, id);
+      if (allianceData.joinTime.gt(0)) {
+        throw new Error('already in alliance');
+      }
+      const p = contracts.BasicAllianceFactory._proxiedContract;
+      const BasicAlliance = p.attach(id);
+      let memberNonce = await BasicAlliance.callStatic.memberNonces(addressToInvite);
+
+      if (typeof memberNonce === 'number') {
+        memberNonce = BigNumber.from(memberNonce);
+      }
+
+      let message = `Invite Player ${hexZeroPad(addressToInvite.toLowerCase(), 20)} To Alliance ${hexZeroPad(
+        id.toLowerCase(),
+        20
+      )}`;
+      if (memberNonce.gt(0)) {
+        message = `Invite Player ${hexZeroPad(addressToInvite.toLowerCase(), 20)} To Alliance ${hexZeroPad(
+          id.toLowerCase(),
+          20
+        )} (nonce: ${('' + memberNonce.toNumber()).padStart(10, ' ')})`;
+      }
+      console.log({message});
+      const signature = await wallet.provider.getSigner().signMessage(message);
+      inviteURL =
+        location.protocol +
+        '//' +
+        location.hostname +
+        (location.port ? ':' + location.port : '') +
+        `/invite/#${message}:${signature}`;
     });
   }
 
@@ -152,6 +190,8 @@
       }
     }
   }
+
+  $: isAdmin = admin && $wallet.address?.toLowerCase() === admin;
 </script>
 
 <Header />
@@ -164,7 +204,9 @@
           <h2 class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
             <Blockie address={id} class="w-12 h-12 inline" />
           </h2>
-          <h2 class="text-center text-base leading-8 font-extrabold tracking-tight text-gray-500">
+          <h2
+            class="text-center md:text-xl lg-text-2xl text-base sm:text-basetext-center  leading-8 font-extrabold tracking-tight text-gray-500"
+          >
             Alliance {id}
           </h2>
         {/if}
@@ -186,48 +228,89 @@
             <PanelButton on:click={() => flow.connect()} label="load">load</PanelButton>
           {:else if !id}
             <!-- nothing -->
-          {:else if $wallet.address.toLowerCase() !== admin}
-            {#if isAllianceMember}
-              <div>
-                <PanelButton on:click={leave} label="Join">Leave Alliance</PanelButton>
-              </div>
-            {:else}
-              <h2 class="text-xl text-green-500">Do you want to join the alliance ?</h2>
-              <div>
-                <PanelButton on:click={join} label="Join">Request to Join</PanelButton>
-              </div>
-
-              {#if signedMessage}
-                <p>Copy this string and send it to the admin:</p>
-                <pre class="bg-blue-800 text-white" on:click={select}>{signedMessage}</pre>
-              {/if}
-
-              The Administrator to contact : <Blockie class="w-6 h-6 m-1 inline" address={admin} />{admin} (<button
-                class="underline"
-                on:click={() => messageFlow.show(admin)}>contact admin</button
-              >)
-            {/if}
           {:else}
-            <h2 class="text-xl text-green-500">
-              You are the administrator of this alliance. do you want to add members?
+            <h2 class="md:text-xl lg-text-2xl text-base text-green-600">
+              Members
+              <ul>
+                {#each $playersQuery.data.alliances[id].members as member}
+                  <li class="m-2">
+                    <Blockie class="inline-block" address={member.address} />
+                    {member.address}
+                    {#if isAdmin && member.address !== $wallet.address.toLowerCase()}<PanelButton>Kick</PanelButton
+                      >{/if}
+                  </li>
+                {/each}
+              </ul>
             </h2>
-            <p>Please copy their signed message into the box to add the members</p>
-            <div>
-              <div>
-                <textarea bind:value={joinMessage} class="bg-gray-200 w-80 h-80" />
-              </div>
-              <div>
-                <PanelButton on:click={addMember} label="Add Member">Add Member</PanelButton>
-              </div>
-            </div>
+            <div class="w-full border-2 border-black my-2" />
 
-            <div>
-              <PanelButton on:click={leave} label="Join">Leave Your Own Alliance</PanelButton>
-            </div>
+            {#if !isAdmin}
+              {#if isAllianceMember}
+                <div>
+                  <PanelButton on:click={leave} label="Join">Leave Alliance</PanelButton>
+                </div>
+              {:else}
+                <h2 class="text-xl text-green-500">Do you want to join the alliance ?</h2>
+                <div>
+                  <PanelButton on:click={join} label="Join">Request to Join</PanelButton>
+                </div>
+
+                {#if signedMessage}
+                  <p>Copy this string and send it to the admin:</p>
+                  <pre class="bg-blue-800 text-white" on:click={select}>{signedMessage}</pre>
+                {/if}
+
+                The Administrator to contact : <Blockie class="w-6 h-6 m-1 inline" address={admin} />{admin} (<button
+                  class="underline"
+                  on:click={() => messageFlow.show(admin)}>contact admin</button
+                >)
+              {/if}
+            {:else}
+              <h2 class="md:text-xl lg-text-2xl text-base text-green-600">
+                You are the administrator of this alliance.
+              </h2>
+              <div class="w-full border-2 border-black my-2" />
+              <h3 class="text-xl text-green-600">do you want to add members?</h3>
+              <p>Please copy their signed message into the box to add the members</p>
+              <div>
+                <div>
+                  <textarea bind:value={joinMessage} class="bg-gray-200 w-80 h-80" />
+                </div>
+                <div>
+                  <PanelButton on:click={addMember} label="Add Member">Add Member</PanelButton>
+                </div>
+              </div>
+
+              <div class="w-full border-2 border-black my-2" />
+
+              <!-- <h3 class="text-xl text-green-600">You can also send invites.</h3>
+
+              <div>
+                <div>
+                  <label for="addressToInvite">Address:</label><input
+                    id="addressToInvite"
+                    type="text"
+                    bind:value={addressToInvite}
+                    class="bg-gray-200"
+                  />
+                </div>
+                <PanelButton on:click={createInvite} label="Create Invite">Create Invite</PanelButton>
+
+                {#if inviteURL}
+                  <a href={`${inviteURL}`} class="underline">Invite Link</a>
+                {/if}
+              </div>
+
+              <div class="w-full border-2 border-black my-2" />
+
+              <div>
+                <PanelButton on:click={leave} label="Join">Leave Your Own Alliance</PanelButton>
+              </div> -->
+            {/if}
           {/if}
 
           <hr class="m-8" />
-          {#if admin && $wallet.address?.toLowerCase() === admin}
+          {#if isAdmin}
             <p>Or maybe you want to create another alliance ?</p>
           {:else}
             <p>Or do you want to create your own alliance?</p>
