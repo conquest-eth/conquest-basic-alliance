@@ -173,6 +173,7 @@ importers:
       eslint: ^8.6.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-svelte3: ^3.3.0
+      fs-extra: ^10.0.0
       graphql: ^16.2.0
       hash.js: ^1.1.7
       ipfs-deploy: ^11.1.0
@@ -227,6 +228,7 @@ importers:
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-plugin-svelte3: 3.3.0_eslint@8.6.0+svelte@3.44.3
+      fs-extra: 10.0.0
       hash.js: 1.1.7
       ipfs-deploy: 11.1.0
       ipfs-gateway-emulator: 4.2.1-ipfs.1
