@@ -90,7 +90,7 @@ function buildEip1193Fetcher(provider) {
           if (request.params && request.params.length > 0 && request.params[request.params.length - 1] === 'latest') {
             console.log(`request was made against "latest", fetching latest block...`);
             promise = provider.request({method: 'eth_blockNumber', params: []}).then((v) => {
-              console.log(`replacing "latest" with "${parseInt(v.slice(2), 16)}"`);
+              console.log(`replacing "latest" with "v" (${parseInt(v.slice(2), 16)})`);
               request = {
                 method: request.method,
                 params: [...request.params.slice(0, request.params.length - 1), v],
