@@ -8,11 +8,13 @@
   import Header from '$lib/navigation/header.svelte';
   import {playersQuery} from '$lib/blockchain/playersQuery';
   import {url} from '$lib/utils/url';
+  import Modal from '$lib/components/styled/Modal.svelte';
 
   function connect() {
     flow.connect();
   }
 
+  let txHash: string | undefined;
   async function create() {
     await flow.execute(async (contracts) => {
       const salt = Wallet.createRandom().privateKey;
@@ -21,11 +23,15 @@
       // TODO allow multiple members at creation
       const message = `Join Alliance ${hexZeroPad(deterministicAddress.toLowerCase(), 20)}`;
       const signature = await wallet.provider.getSigner().signMessage(message);
-      await contracts.BasicAllianceFactory.instantiate(
+      const tx = await contracts.BasicAllianceFactory.instantiate(
         wallet.address,
         [{addr: wallet.address, nonce: 0, signature}],
         salt
       );
+      txHash = tx.hash;
+
+      await tx.wait();
+      txHash = undefined;
     });
   }
 </script>
@@ -93,3 +99,7 @@
     </div>
   </div>
 </WalletAccess>
+
+{#if txHash}
+  <Modal>Waiting for transaction...</Modal>
+{/if}
