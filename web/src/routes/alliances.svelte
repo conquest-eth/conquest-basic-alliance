@@ -114,7 +114,7 @@
         '//' +
         location.hostname +
         (location.port ? ':' + location.port : '') +
-        `/invite/#${message}:${signature}`;
+        `/invite/#${addressToInvite}:${id}:${memberNonce}:${signature}`;
     });
   }
 
@@ -232,7 +232,7 @@
             <h2 class="md:text-xl lg-text-2xl text-base text-green-600">
               Members
               <ul>
-                {#each $playersQuery.data.alliances[id].members as member}
+                {#each ($playersQuery.data?.alliances[id].members || []) as member}
                   <li class="m-2">
                     <Blockie class="inline-block" address={member.address} />
                     {member.address}
@@ -271,19 +271,6 @@
               </h2>
               <div class="w-full border-2 border-black my-2" />
               <h3 class="text-xl text-green-600">do you want to add members?</h3>
-              <p>Please copy their signed message into the box to add the members</p>
-              <div>
-                <div>
-                  <textarea bind:value={joinMessage} class="bg-gray-200 w-80 h-80" />
-                </div>
-                <div>
-                  <PanelButton on:click={addMember} label="Add Member">Add Member</PanelButton>
-                </div>
-              </div>
-
-              <div class="w-full border-2 border-black my-2" />
-
-              <!-- <h3 class="text-xl text-green-600">You can also send invites.</h3>
 
               <div>
                 <div>
@@ -297,7 +284,7 @@
                 <PanelButton on:click={createInvite} label="Create Invite">Create Invite</PanelButton>
 
                 {#if inviteURL}
-                  <a href={`${inviteURL}`} class="underline">Invite Link</a>
+                  <a href={`${inviteURL}`} target="_blank" class="underline">Invite Link</a>
                 {/if}
               </div>
 
@@ -305,7 +292,7 @@
 
               <div>
                 <PanelButton on:click={leave} label="Join">Leave Your Own Alliance</PanelButton>
-              </div> -->
+              </div>
             {/if}
           {/if}
 

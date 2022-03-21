@@ -6,6 +6,7 @@ export const chainNames: {[chainId: string]: string} = {
   '42': 'kovan',
   '1337': 'localhost chain',
   '31337': 'localhost chain',
+  '100': 'Gnosis Chain',
 };
 
 export function nameForChainId(chainId: string): string {

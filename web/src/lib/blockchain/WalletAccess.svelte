@@ -5,6 +5,7 @@
   import Modal from '$lib/components/styled/Modal.svelte';
   import {base} from '$app/paths';
   import {wallet, builtin, chain, flow, fallback} from '$lib/blockchain/wallet';
+  import {formatError} from '$lib/utils';
 
   $: executionError = $flow.executionError as any;
 
@@ -181,7 +182,7 @@
         <p>
           {#if executionError.code === 4001}
             You rejected the request
-          {:else if executionError.message}{executionError.message}{:else}Error: {executionError}{/if}
+          {:else}{formatError(executionError)}{/if}
         </p>
         <NavButton class="mt-4" label="Retry" on:click={() => flow.retry()}>Retry</NavButton>
       </div>
