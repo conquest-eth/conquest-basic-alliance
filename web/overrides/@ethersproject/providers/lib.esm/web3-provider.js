@@ -55,7 +55,7 @@ function buildEip1193Fetcher(provider) {
     if (params == null) {
       params = [];
     }
-    const request = deepCopy({method, params});
+    let request = {method, params};
     this.emit('debug', {
       action: 'request',
       fetcher: 'Eip1193Fetcher',
@@ -88,13 +88,13 @@ function buildEip1193Fetcher(provider) {
           console.error(`block not available: `, message, 'retrying....', request);
           let promise = Promise.resolve();
           if (request.params && request.params.length > 0 && request.params[request.params.length - 1] === 'latest') {
-            console.log(`request was made against "latest", fetching latest block manually`);
-            console.log(request); // TODO remove
+            console.log(`request was made against "latest", fetching latest block...`);
             promise = provider.request({method: 'eth_blockNumber', params: []}).then((v) => {
-              request.params[request.params.length - 1] = v;
-              console.log(request); // TODO remove
-              console.log({blockNumber: parseInt(v.slice(2), 16)});
-              return v;
+              console.log(`replacing "latest" with "${parseInt(v.slice(2), 16)}"`);
+              request = {
+                method: request.method,
+                params: [...request.params.slice(0, request.params.length - 1), v],
+              };
             });
           }
           return promise.then(() =>
