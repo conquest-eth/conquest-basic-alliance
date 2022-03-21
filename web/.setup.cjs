@@ -34,6 +34,8 @@ function walk(directoryName, fnc) {
 }
 
 const overridesFolder = 'overrides';
-walk(overridesFolder, (fullpath) =>
-  fs.copyFileSync(fullpath, `node_modules/${fullpath.substring(overridesFolder.length + 1)}`)
-);
+if (fs.existsSync(overridesFolder)) {
+  walk(overridesFolder, (fullpath) =>
+    fs.copyFileSync(fullpath, `node_modules/${fullpath.substring(overridesFolder.length + 1)}`)
+  );
+}

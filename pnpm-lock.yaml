@@ -72,7 +72,7 @@ importers:
       ethers: ^5.5.4
       fs-extra: ^10.0.0
       hardhat: ^2.8.3
-      hardhat-deploy: ^0.10.4
+      hardhat-deploy: ^0.11.2
       hardhat-deploy-tenderly: ^0.1.0
       hardhat-gas-reporter: ^1.0.7
       mocha: ^9.2.0
@@ -106,8 +106,8 @@ importers:
       ethers: 5.5.4
       fs-extra: 10.0.0
       hardhat: 2.8.3
-      hardhat-deploy: 0.10.4_hardhat@2.8.3
-      hardhat-deploy-tenderly: 0.1.0_9d302e1e247ee55c34e65fa37b70e70f
+      hardhat-deploy: 0.11.2_hardhat@2.8.3
+      hardhat-deploy-tenderly: 0.1.0_259f882fee69374212bf4fc08f25ef5f
       hardhat-gas-reporter: 1.0.7_hardhat@2.8.3
       mocha: 9.2.0
       prettier: 2.5.1
@@ -6914,7 +6914,7 @@ packages:
       hardhat: 2.8.3
     dev: true
 
-  /hardhat-deploy-tenderly/0.1.0_9d302e1e247ee55c34e65fa37b70e70f:
+  /hardhat-deploy-tenderly/0.1.0_259f882fee69374212bf4fc08f25ef5f:
     resolution: {integrity: sha512-Ra6Fhgzrt+9xfVzpbb73kbeCJjjsbgvCMMJxQSpCgAVWOdjYKdk/BBp4sq2+LEHpdyhZHN8s1y8NHSeZ81m+TA==}
     peerDependencies:
       hardhat: ^2.0.0
@@ -6922,14 +6922,14 @@ packages:
     dependencies:
       axios: 0.24.0
       hardhat: 2.8.3
-      hardhat-deploy: 0.10.4_hardhat@2.8.3
+      hardhat-deploy: 0.11.2_hardhat@2.8.3
       js-yaml: 4.1.0
     transitivePeerDependencies:
       - debug
     dev: true
 
-  /hardhat-deploy/0.10.4_hardhat@2.8.3:
-    resolution: {integrity: sha512-9b7kFWul3Gjm/JURzVicnD5mGNjNyEwFHFKU+8URJ3q4hjCvYR9Ja99ChmVMGzM8DPJhlvEVNBkcv/3wnwZpfQ==}
+  /hardhat-deploy/0.11.2_hardhat@2.8.3:
+    resolution: {integrity: sha512-7J6dhm3Y3ix63HU+oJJWwpcusdXZvs4fskyyU2YbNxPKBXFwfNl22dN5ckxTDWIoWpUeovI3HxUybps5VSsrCg==}
     peerDependencies:
       '@ethersproject/hardware-wallets': ^5.0.14
       hardhat: ^2.6.8
