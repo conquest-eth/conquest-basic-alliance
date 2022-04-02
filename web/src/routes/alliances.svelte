@@ -46,6 +46,12 @@
     });
   }
 
+  async function kick(playerAddress: string) {
+    await flow.execute(async (contracts) => {
+      await contracts.AllianceRegistry.kick(playerAddress);
+    });
+  }
+
   async function addMember() {
     await flow.execute(async (contracts) => {
       // TODO do not use : as separator
@@ -232,12 +238,14 @@
             <h2 class="md:text-xl lg-text-2xl text-base text-green-600">
               Members
               <ul>
-                {#each ($playersQuery.data?.alliances[id].members || []) as member}
+                {#each $playersQuery.data?.alliances[id].members || [] as member}
                   <li class="m-2">
                     <Blockie class="inline-block" address={member.address} />
                     {member.address}
-                    {#if isAdmin && member.address !== $wallet.address.toLowerCase()}<PanelButton>Kick</PanelButton
-                      >{/if}
+                    <!-- TODO -->
+                    <!-- {#if isAdmin && member.address !== $wallet.address.toLowerCase()}<PanelButton on:click={kick}
+                        >Kick</PanelButton
+                      >{/if} -->
                   </li>
                 {/each}
               </ul>
