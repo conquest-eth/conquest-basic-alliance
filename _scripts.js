@@ -226,20 +226,20 @@ async function performAction(rawArgs) {
     const network = fixedArgs[0] || 'localhost';
     const env = getEnv(network);
     await execute(`${env}npm --prefix contracts run tenderly:push ${network}`);
-  } else if (firstArg === 'subgraph:dev') {
-    await execute(`dotenv -- npm --prefix subgraph run setup`);
-    await execute(`wait-on web/src/lib/contracts.json`);
-    await execute(`dotenv -- npm --prefix subgraph run dev ../contracts/deployments/localhost mainnet`);
-  } else if (firstArg === 'subgraph:deploy') {
-    const {fixedArgs, extra} = parseArgs(args, 1, {});
-    const network = fixedArgs[0] || 'localhost';
-    const env = getEnv(network);
-    let deployCommand = 'deploy';
-    if (network && network !== 'localhost') {
-      deployCommand = 'hosted:deploy';
-    }
-    await execute(`wait-on web/src/lib/contracts.json`);
-    await execute(`${env}npm --prefix subgraph run ${deployCommand} ../contracts/deployments/${network}`);
+    // } else if (firstArg === 'subgraph:dev') {
+    //   await execute(`dotenv -- npm --prefix subgraph run setup`);
+    //   await execute(`wait-on web/src/lib/contracts.json`);
+    //   await execute(`dotenv -- npm --prefix subgraph run dev ../contracts/deployments/localhost mainnet`);
+    // } else if (firstArg === 'subgraph:deploy') {
+    //   const {fixedArgs, extra} = parseArgs(args, 1, {});
+    //   const network = fixedArgs[0] || 'localhost';
+    //   const env = getEnv(network);
+    //   let deployCommand = 'deploy';
+    //   if (network && network !== 'localhost') {
+    //     deployCommand = 'hosted:deploy';
+    //   }
+    //   await execute(`wait-on web/src/lib/contracts.json`);
+    //   await execute(`${env}npm --prefix subgraph run ${deployCommand} ../contracts/deployments/${network}`);
   } else if (firstArg === 'web:dev') {
     const {fixedArgs, options, extra} = parseArgs(args, 1, {skipContracts: 'boolean', waitContracts: 'boolean'});
     const network = fixedArgs[0] || 'localhost';
@@ -293,7 +293,7 @@ async function performAction(rawArgs) {
       return;
     }
     await performAction(['contracts:deploy', network]);
-    await performAction(['subgraph:deploy', network]);
+    // await performAction(['subgraph:deploy', network]);
     await performAction(['web:deploy', network]);
   } else if (firstArg === 'deploy:noweb') {
     const {fixedArgs, extra} = parseArgs(args, 1, {});
@@ -303,7 +303,7 @@ async function performAction(rawArgs) {
       return;
     }
     await performAction(['contracts:deploy', network]);
-    await performAction(['subgraph:deploy', network]);
+    // await performAction(['subgraph:deploy', network]);
   } else if (firstArg === 'stop') {
     await execute(`docker-compose down -v --remove-orphans`);
   } else if (firstArg === 'externals') {
@@ -317,7 +317,7 @@ async function performAction(rawArgs) {
     execute(`newsh "npm run common:dev"`);
     execute(`newsh "npm run web:dev localhost -- --skipContracts --waitContracts ${extra.join(' ')}"`);
     execute(`newsh "npm run contracts:local:dev"`);
-    execute(`newsh "npm run subgraph:dev"`);
+    // execute(`newsh "npm run subgraph:dev"`);
   } else if (firstArg === 'import:deployments') {
     const {fixedArgs} = parseArgs(args, 2);
     const network = fixedArgs[0] || (await getNetworkName());
@@ -350,7 +350,7 @@ async function performAction(rawArgs) {
     await execute('rimraf web/src/lib/contracts.json');
     await performAction(['import:deployments', 'localhost', options.import]);
     execute(`newsh "npm run contracts:local:dev"`);
-    execute(`newsh "npm run subgraph:dev"`);
+    // execute(`newsh "npm run subgraph:dev"`);
     await performAction(['common:build']);
     await performAction(['contracts:seed', 'localhost', '--waitContracts']);
   }
