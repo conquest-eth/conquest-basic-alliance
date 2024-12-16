@@ -227,9 +227,6 @@ importers:
       web3w:
         specifier: ^0.3.2-beta.25
         version: 0.3.2-beta.25(@ethersproject/abi@5.7.0)(@ethersproject/bignumber@5.7.0)(@ethersproject/contracts@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.8))
-      web3w-walletconnect-loader:
-        specifier: ^0.3.2
-        version: 0.3.2
       wonka:
         specifier: ^4.0.15
         version: 4.0.15
@@ -6584,9 +6581,6 @@ packages:
   web3@1.5.3:
     resolution: {integrity: sha512-eyBg/1K44flfv0hPjXfKvNwcUfIVDI4NX48qHQe6wd7C8nPSdbWqo9vLy6ksZIt9NLa90HjI8HsGYgnMSUxn6w==}
     engines: {node: '>=8.0.0'}
-
-  web3w-walletconnect-loader@0.3.2:
-    resolution: {integrity: sha512-6IgyNsnC92ermTq3cGmU0hLMM0LuGObyN3sZfR/Zp01haaMGi6GRrtx9BtHkBcHfO4lXbtx6iO3Chc71prtHrA==}
 
   web3w@0.3.2-beta.25:
     resolution: {integrity: sha512-nHZf0ym2BuPiuZo+zI96gNiH5VPX2JrFcrREiC7I+amfwsDvAYa0Tx53rsel2Iz9WExG43jvWraIHjueWhGUBw==}
@@ -14583,10 +14577,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  web3w-walletconnect-loader@0.3.2:
-    dependencies:
-      named-logs: 0.1.0
 
   web3w@0.3.2-beta.25(@ethersproject/abi@5.7.0)(@ethersproject/bignumber@5.7.0)(@ethersproject/contracts@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.8)):
     dependencies:
