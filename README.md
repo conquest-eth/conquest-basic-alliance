@@ -1,5 +1,7 @@
 # Basic Alliance
 
+What is written below is outdated
+
 # Getting Started
 
 Please clone the following repo : https://github.com/conquest-eth/conquest-playground
