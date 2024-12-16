@@ -1,5 +1,4 @@
 import {initWeb3W} from 'web3w';
-import {WalletConnectModuleLoader} from 'web3w-walletconnect-loader';
 import {contractsInfos} from '$lib/blockchain/contracts';
 import {notifications} from '../web/notifications';
 import {webWalletURL, finality, fallbackProviderOrUrl, chainId, localDev} from '$lib/config';
@@ -21,14 +20,7 @@ const walletStores = initWeb3W({
   },
   autoSelectPrevious: true,
   localStoragePrefix: (base && base.startsWith('/ipfs/')) || base.startsWith('/ipns/') ? base.slice(6) : undefined, // ensure local storage is not conflicting across web3w-based apps on ipfs gateways
-  options: [
-    'builtin',
-    new WalletConnectModuleLoader({
-      nodeUrl: typeof fallbackProviderOrUrl === 'string' ? fallbackProviderOrUrl : undefined,
-      chainId,
-      infuraId: 'bc0bdd4eaac640278cdebc3aa91fabe4',
-    }),
-  ],
+  options: ['builtin'],
   fallbackNode: fallbackProviderOrUrl,
   checkGenesis: localDev,
 });
