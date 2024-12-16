@@ -43,7 +43,7 @@
   }
 
   async function switchChain() {
-    let blockExplorerUrls: string[] | undefined;
+    let blockExplorerUrls: string[] = [];
     const explorerTXURL = import.meta.env.VITE_BLOCK_EXPLORER_TRANSACTION as string;
     if (explorerTXURL) {
       blockExplorerUrls.push(explorerTXURL.slice(0, explorerTXURL.length - 2));
