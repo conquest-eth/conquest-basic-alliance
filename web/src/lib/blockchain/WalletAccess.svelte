@@ -1,6 +1,14 @@
 <script lang="ts">
   export let title = '';
-  import {chainId, chainName, fallbackProviderOrUrl, webWalletURL} from '$lib/config';
+  import {
+    chainId,
+    chainName,
+    fallbackProviderOrUrl,
+    nativeTokenDecimal,
+    nativeTokenName,
+    nativeTokenSymbol,
+    webWalletURL,
+  } from '$lib/config';
   import NavButton from '$lib/components/styled/navigation/NavButton.svelte';
   import Modal from '$lib/components/styled/Modal.svelte';
   import {base} from '$app/paths';
@@ -55,7 +63,16 @@
     if (fallbackProviderOrUrl) {
       rpcUrls.push(fallbackProviderOrUrl);
     }
-    await chain.switchChain(chainId, {chainName, rpcUrls, blockExplorerUrls});
+    await chain.switchChain(chainId, {
+      chainName,
+      rpcUrls,
+      blockExplorerUrls,
+      nativeCurrency: {
+        name: nativeTokenName,
+        symbol: nativeTokenSymbol,
+        decimals: nativeTokenDecimal,
+      },
+    });
   }
 </script>
 
